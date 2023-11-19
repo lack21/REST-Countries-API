@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 function App() {
   const [countries, setCountries] = useState([]);
+  const [isTheme, setIsTheme] = useState(false);
 
   const getData = async () => {
     const response = await fetch("https://restcountries.com/v3.1/all");
@@ -14,25 +15,8 @@ function App() {
   }, []);
 
   const toggleTheme = () => {
-    const themeBtn = document.querySelector(".theme-btn");
-    const activeArray = [
-      document.body,
-      document.querySelector(".nav-bar"),
-      ,
-      document.querySelector(".main-input"),
-      document.querySelector(".select"),
-      document.querySelector(".back-btn"),
-    ];
-    const boxes = document.querySelectorAll(".box");
-
-    boxes.forEach((item) => item.classList.toggle("active"));
-    themeBtn.classList.toggle("active");
-    activeArray.forEach((item) => item.classList.toggle("active"));
-
-    themeBtn.innerHTML =
-      themeBtn.innerHTML == '<i class="fa fa-moon-o"></i> Dark Mode'
-        ? '<i class="fa fa-sun-o"></i> Light Mode'
-        : '<i class="fa fa-moon-o"></i> Dark Mode';
+    setIsTheme(!isTheme);
+    document.body.classList.toggle("active");
   };
 
   const returnContainer = () => {
@@ -109,10 +93,17 @@ function App() {
 
   return (
     <>
-      <nav className="nav-bar">
+      <nav className={`nav-bar ${isTheme ? "active" : ""}`}>
         <h1 className="title">Where in the world?</h1>
-        <button className="theme-btn" onClick={toggleTheme}>
-          <i className="fa fa-sun-o"></i>
+        <button
+          className={`theme-btn ${isTheme ? "active" : ""}`}
+          onClick={toggleTheme}
+        >
+          {isTheme ? (
+            <i className="fa fa-moon-o"></i>
+          ) : (
+            <i className="fa fa-sun-o"></i>
+          )}
           Light Mode
         </button>
       </nav>
@@ -123,10 +114,13 @@ function App() {
           <input
             type="search"
             placeholder="Search for a country..."
-            className="main-input"
+            className={`main-input ${isTheme ? "active" : ""}`}
           />
         </div>
-        <select className="select" onChange={changeData}>
+        <select
+          className={`select ${isTheme ? "active" : ""}`}
+          onChange={changeData}
+        >
           <option hidden>Filter by region</option>
           <option>Africa</option>
           <option>America</option>
@@ -137,7 +131,10 @@ function App() {
       </div>
 
       <div className="container">
-        <button className="back-btn" onClick={returnContainer}>
+        <button
+          className={`back-btn ${isTheme ? "active" : ""}`}
+          onClick={returnContainer}
+        >
           <i className="fa fa-arrow-left"></i> Back
         </button>
         <div className="new-container"></div>
@@ -147,7 +144,7 @@ function App() {
           return (
             <article
               key={index}
-              className="box"
+              className={`box ${isTheme ? "active" : ""}`}
               onClick={() =>
                 toggleContainer(
                   item.flags.png,
